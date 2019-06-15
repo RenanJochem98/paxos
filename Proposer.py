@@ -1,6 +1,6 @@
 class Proposer(object):
-    def __init__(self, id):
-        self.id = id
+    def __init__(self):
+        self.id = 0
         self.acceptors = []
 
     def getId(self):
