@@ -12,7 +12,11 @@ class Proposal(object):
         self.id = newId
 
     def addProposer(self, proposer):
+        proposer.setQuantTotalProposers(len(self.proposers) +1)
         self.proposers.append(proposer)
+
+    def getQuantProposers(self):
+        return len(self.proposers)
 
     def proposal_number(self):
         ids_usados = []
