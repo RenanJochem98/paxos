@@ -1,5 +1,6 @@
-id = 1
-value = 2
-getName = "Server"
-x = "Proposer Id: " + str(id) + ", Proposer Value: "+str(value)+", Propser Server Name: "+ str(getName)
+a = {12:45, 44:15, 7:23}
+x = max(a)
 print(x)
+
+y = max([i for i in a.values()])
+print(y)

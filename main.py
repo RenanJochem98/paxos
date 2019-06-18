@@ -8,9 +8,9 @@ print("######   ALGORITMO INICIADO  ######")
 # count = 0
 server = Server()
 
-prop = Proposer()
-prop2 = Proposer()
-prop3 = Proposer()
+prop = Proposer(1,10)
+prop2 = Proposer(2,20)
+prop3 = Proposer(3, 30)
 
 server.addProposer(prop)
 server.addProposer(prop2)

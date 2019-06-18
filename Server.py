@@ -35,7 +35,7 @@ class Server(object):
 
     def addProposer(self, proposer):
         proposer.server = self
-        proposer.setId(self.getUniqueId())
+        # proposer.setNumber(self.getUniqueId())
         self.proposers.append(proposer)
         self.quantProposers += 1
 
@@ -46,7 +46,7 @@ class Server(object):
 
     def getUniqueProposer(self, propNumber):
         for p in self.proposers:
-            if propNumber == p.getId():
+            if propNumber == p.getNumber():
                 return p
         return None
 
@@ -68,19 +68,25 @@ class Server(object):
     def send_prepare_request(self, propId, propValue):
         # self.temp_store[propId] = propValue
         # if(len(self.temp_store)) == self.quantProposers:
-        # for key in self.temp_store:
+            # for key in self.temp_store:
         for a in self.acceptors:
-            # print("Enviando valor de Proposer "+str(propId)+ " para Acceptor "+str(a.getId()))
-                a.prepare_response(propId, propValue, self.quantProposers)
-        # self.temp_store.clear()
+                    # print("Enviando valor de Proposer "+str(key)+ ", com valor "+str(self.temp_store[key])+" para Acceptor "+str(a.getId()))
+            a.prepare_response(propId, propValue, self.quantProposers)
+            # a.prepare_response(key, self.temp_store[key], self.quantProposers)
+            # self.temp_store.clear()
         # else:
         #     print("Proposer "+str(propId)+" barrado no send_prepare_request()")
         # print("")
         # self.showAllProposers()
     def prop_accept_request(self, propNumber, propValue):
-        prop = self.getUniqueProposer(propNumber)
-        if prop is not None:
-            prop.accept_request(propNumber, propValue)
+        self.temp_store[propNumber] = propValue
+        if(len(self.temp_store)) == self.quantAcceptors:
+        #     print("Passou")
+            prop = self.getUniqueProposer(propNumber)
+            if prop is not None:
+                prop.accept_request(self.temp_store)
+            # self.temp_store.clear()
+                # prop.accept_request(propNumber, propValue)
 
     def send_final_response(self, greaterPropId, greaterPropValue):
         # self.temp_store.append(greaterPropId)
