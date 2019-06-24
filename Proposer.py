@@ -1,6 +1,7 @@
 from random import randint
 class Proposer(object):
     def __init__(self, number, value):
+        # self.number = 0
         self.number = number
         self.acceptors = []
         self.value = value
@@ -28,6 +29,7 @@ class Proposer(object):
         return randint(1,1000)
 
     def prepare_request(self):
+        # print("Prop enviou: N: "+str(self.number)+" V: "+str(self.value))
         self.server.send_prepare_request(self.number, self.value)
         # for a in self.acceptors:
         #     a.prepare_reponse(self.number, self.value, self.quantTotalProposers)
@@ -48,7 +50,7 @@ class Proposer(object):
             # sendValue = max(self.value, propValue)
             print("Proposer: "+str(self.number)+" envia numero "+str(sendId)+ ", com valor "+str(sendValue))
 
-            # self.server.send_final_response(sendId, sendValue)
+            self.server.send_final_response(sendId, sendValue)
 
     def propToString(self):
         return "Proposer Id: " + str(self.number) + ", Proposer Value: "+str(self.value)+", Proposer Server Name: "+ str(self.server.getName())

@@ -1,4 +1,8 @@
 from random import randint
+from datetime import datetime
+from datetime import timedelta
+import time
+
 class Server(object):
 
     def __init__(self):
@@ -10,6 +14,8 @@ class Server(object):
         self.quantAcceptors = 0
         self.ids_usados = []
         self.temp_store = {} # guarda temporariamente proposers para nao executar tudo sequencial
+        self.testeTime = None
+        self.numberIgnorados = 0
 
     #apenas para testes
     def getName(self):
@@ -65,40 +71,38 @@ class Server(object):
                 tem_id = True
         return id
 
-    def send_prepare_request(self, propId, propValue):
-        # self.temp_store[propId] = propValue
-        # if(len(self.temp_store)) == self.quantProposers:
-            # for key in self.temp_store:
+    def send_prepare_request(self, propNumber, propValue):
         for a in self.acceptors:
-                    # print("Enviando valor de Proposer "+str(key)+ ", com valor "+str(self.temp_store[key])+" para Acceptor "+str(a.getId()))
-            a.prepare_response(propId, propValue, self.quantProposers)
-            # a.prepare_response(key, self.temp_store[key], self.quantProposers)
-            # self.temp_store.clear()
-        # else:
-        #     print("Proposer "+str(propId)+" barrado no send_prepare_request()")
-        # print("")
-        # self.showAllProposers()
+            # print("Enviando valor de Proposer "+str(propNumber)+ ", com valor "]
+            # +str(propValue)+" para Acceptor "+str(a.getId()))
+            a.prepare_response(propNumber, propValue, self.quantProposers)
+
     def prop_accept_request(self, propNumber, propValue):
-        self.temp_store[propNumber] = propValue
-        if(len(self.temp_store)) == self.quantAcceptors:
-        #     print("Passou")
-            prop = self.getUniqueProposer(propNumber)
-            if prop is not None:
+        if propNumber is None:
+            self.numberIgnorados += 1
+        else:
+            self.temp_store[propNumber] = propValue
+        # if self.testeTime is not None:
+        #     self.testeTime = datetime.now()
+        # print("Chamado as: ")
+        # print(self.testeTime)
+        # print("Recebeu: N: "+str(propNumber)+" V: "+str(propValue))
+        # if self.testeTime is not None:
+            # x = self.testeTime + timedelta(seconds=5)
+            # if x <= datetime.now():
+        if len(self.temp_store)+self.numberIgnorados == self.quantAcceptors:
+            # print("Passou")
+            # print(self.temp_store)
+            for kwy in self.temp_store:
                 prop.accept_request(self.temp_store)
-            # self.temp_store.clear()
-                # prop.accept_request(propNumber, propValue)
+        self.temp_store.clear()
 
-    def send_final_response(self, greaterPropId, greaterPropValue):
-        # self.temp_store.append(greaterPropId)
-        # if(len(self.temp_store)) == self.quantProposers:
-        #     del self.temp_store[:]
+    def send_final_response(self, greaterPropNumber, greaterPropValue):
         for a in self.acceptors:
-            a.accepted(greaterPropId, greaterPropValue)
-        # else:
-        #     print("Proposer "+str(greaterPropId)+" barrado no send_final_response()")
-        #     print("")
+            a.accepted(greaterPropNumber, greaterPropValue)
 
-    def send_value_to_learners(self, value, acceptorId, propId):
+    def send_value_to_learners(self, value, acceptorId, propNumber):
         print("****************************************************")
-        print("Valor aceito em Paxos: "+str(value)+", enviado pelo Acceptor: "+str(acceptorId)+" e gerado pelo Proposer: "+str(propId))
+        print("Valor aceito em Paxos: "+str(value)+", enviado pelo Acceptor: "+str(acceptorId)
+        +" e gerado pelo Proposer: "+str(propNumber))
         print("")

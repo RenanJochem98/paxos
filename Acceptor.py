@@ -16,19 +16,21 @@ class Acceptor(object):
         # print("Acceptor "+str(self.id)+" recebeu valor "+ str(propValue) +" do proposer "+ str(propNumber))
         # tentar garantir que cheguem todos os valores de proposers antes de prosseguir
         if self.server is not None:
+            # print("Acceptor: "+str(self.id))
             if not self.propInfos:
-                # print("Recebeu id "+str(propNumber)+" e valor "+str(propValue)+ " sem outros valores")
+                # print("Primeiro Recebido: N: "+str(propNumber)+" V: "+str(propValue))
                 self.server.prop_accept_request(propNumber, propValue)
                 self.minimumNumber = propNumber
+                # print("Numero Minimo: "+str(propNumber)+", atrelado ao valor: "+str(propValue))
             else:
+                # print("Recebeu: N: "+str(propNumber)+" e ja tinha: "+str(self.minimumNumber))
                 if propNumber > self.minimumNumber:
                     self.server.prop_accept_request(propNumber, propValue)
-                    # self.server.prop_accept_request(self.minimumNumber, self.highestValue)
-                    # print("Recebeu id "+str(propNumber)+" e valor "+str(propValue)+ " com outros valores")
-                    # print("Recebeu id "+str(self.minimumNumber)+" e valor "+str(self.highestValue)+ " com outros valores")
                     self.minimumNumber = propNumber
-                # else:
-                #     print("Igonorou id "+str(propNumber)+" e valor "+str(propValue)+ " com outros valores")
+                    # print("Numero Minimo: "+str(propNumber)+", atrelado ao valor: "+str(propValue))
+                else:
+                    self.server.prop_accept_request(None, None)
+                    print("Igonorou Proposer "+str(propNumber)+" e valor "+str(propValue)+ " com outros valores")
 
             if propValue > self.highestValue:
                 self.highestValue = propValue

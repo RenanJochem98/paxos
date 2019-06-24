@@ -13,8 +13,8 @@ prop2 = Proposer(2,20)
 prop3 = Proposer(3, 30)
 
 server.addProposer(prop)
-server.addProposer(prop2)
 server.addProposer(prop3)
+server.addProposer(prop2)
 
 server.showAllProposers()
 

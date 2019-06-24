@@ -1,6 +1,19 @@
-a = {12:45, 44:15, 7:23}
-x = max(a)
-print(x)
-
-y = max([i for i in a.values()])
-print(y)
+import time
+from datetime import datetime
+count = 0
+while count < 10:
+    print("Count: "+str(count) )
+    if count < 5:
+        print("Menor que: ")
+        time.sleep(3)
+        print("Time: ")
+        print(datetime.now())
+        print("")
+        count += 1
+    else:
+        print("Maior que: ")
+        time.sleep(3)
+        print("Time: ")
+        print(datetime.now())
+        print("")
+        count += 1
