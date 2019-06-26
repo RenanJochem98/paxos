@@ -8,35 +8,27 @@ class Acceptor(object):
 
     def getId(self):
         return self.id
-
     def setId(self, newId):
         self.id = newId
 
     def prepare_response(self, propNumber, propValue, quantTotalProposers):
-        # print("Acceptor "+str(self.id)+" recebeu valor "+ str(propValue) +" do proposer "+ str(propNumber))
-        # tentar garantir que cheguem todos os valores de proposers antes de prosseguir
         if self.server is not None:
-            # print("Acceptor: "+str(self.id))
             if not self.propInfos:
-                # print("Primeiro Recebido: N: "+str(propNumber)+" V: "+str(propValue))
                 self.server.prop_accept_request(propNumber, propValue)
                 self.minimumNumber = propNumber
-                # print("Numero Minimo: "+str(propNumber)+", atrelado ao valor: "+str(propValue))
             else:
-                # print("Recebeu: N: "+str(propNumber)+" e ja tinha: "+str(self.minimumNumber))
                 if propNumber > self.minimumNumber:
-                    self.server.prop_accept_request(propNumber, propValue)
+                    self.server.prop_accept_request(propNumber, self.highestValue)
                     self.minimumNumber = propNumber
-                    # print("Numero Minimo: "+str(propNumber)+", atrelado ao valor: "+str(propValue))
                 else:
-                    self.server.prop_accept_request(None, None)
-                    print("Igonorou Proposer "+str(propNumber)+" e valor "+str(propValue)+ " com outros valores")
+                    self.server.prop_accept_request(propNumber, None)
+                    print("Ignorou Proposer "+str(propNumber)+" e valor "+str(propValue)+ " com outros valores")
 
             if propValue > self.highestValue:
                 self.highestValue = propValue
 
             self.propInfos[propNumber] = propValue
-            # print("")
+
     def accepted(self, propId, value):
         self.server.send_value_to_learners(value, self.id, propId)
 
